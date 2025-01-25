@@ -1,143 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Signage | Menu Online</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Screen</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            /* Full black background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-            color: white;
-        }
-
-        .landing-page {
-            position: absolute;
-            color: white;
-            font-size: 24px;
-            text-align: center;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        #content {
-            display: none;
-            text-align: center;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            /* Send the image to the background */
-        }
-    </style>
-</head>
-
-<body>
-
-    <div id="content" style="width: 1920px; height: 1080px;">
-        <h2>Paired and ready to receive the content</h2>
-        <img id="content-image" src="" alt="Content Image">
-    </div>
-
-    <div class="landing-page" style="width: 1920px; height: 1080px;">
-        <div style="position: absolute; top:20px; text-align: center; width: 100%;">
-            <div>Internet:</div>
-            <div id="network-status">Checking...</div>
-
-            <div>Server:</div>
-            <div id="server-status">Checking...</div>
+  <body>
+    <div class="landing-page" id="landingPage">
+      <div class="net-server">
+        <div class="net">
+          <span>Internet : </span> <span id="internet-status">NO</span>
         </div>
-
+        <div class="server">
+          <span>Server : </span> <span id="server-status">DOWN</span>
+        </div>
+      </div>
+      <div class="screen-id"><span>Screen ID: </span> <span>999036</span></div>
+      <div class="image-slider-div" id="image-slider">
+        <img id="slider-image" src="" />
+      </div>
     </div>
-
-    <img src="./images/bg4.jpg" id="background-image" />
 
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 
     <script>
-        function updateNetworkStatus() {
-            const isOnline = navigator.onLine;
-            const networkStatusText = document.getElementById("network-status");
-            const body = document.body;
+      var timeout = null; // Store the timeout reference
 
-            // Set network status message
-            if (isOnline) {
-                networkStatusText.textContent = "Connected";
-                body.style.backgroundImage = 'none'; // No black background image if online
-                //document.getElementById('background-image').style.display = 'block'; // Show the image
-            } else {
-                networkStatusText.textContent = "Disconnected";
-                body.style.backgroundImage = 'none'; // No black background image if offline
-                //document.getElementById('background-image').style.display = 'none'; // Hide the image
-            }
+      // Function to start the image slider
+      function startSlider(arg) {
+        var imageArrr = null;
+        document.getElementById("image-slider").style.display = "block";
+
+        // Default set of images
+        var old = [
+            {
+              _id: "678690804fb1815c85600614",
+              mediaId:
+                "https://neweditor.menspal.com/backds/api/media/image?path=test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_97466599.jpeg",
+              contentType: "IMAGE",
+              playlistId: "67815f5a4fb1815c853d0bfa",
+              duration: 5,
+              isIncluded: true,
+              other_a: "",
+              other_b: "",
+              mediaName: "Untitled Design_97466599",
+              image_url:
+                "test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_97466599.jpeg",
+            },
+            {
+              _id: "678690804fb1815c85600615",
+              mediaId:
+                "https://neweditor.menspal.com/backds/api/media/image?path=test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_59853382.jpeg",
+              contentType: "IMAGE",
+              playlistId: "67815f5a4fb1815c853d0bfa",
+              duration: 5,
+              isIncluded: true,
+              other_a: "",
+              other_b: "",
+              mediaName: "Untitled Design_59853382",
+              image_url:
+                "test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_59853382.jpeg",
+            },
+          ];
+
+        if (arg) {
+          imageArrr = old;
+        } else {
+          imageArrr = arg;
         }
+        var index = 0; // To keep track of the current image index
+        timeout = setInterval(() => {
+            console.log('run',imageArrr[index].mediaId);
+          document.getElementById("slider-image").src = imageArrr[index].mediaId;
+          index = (index + 1) % imageArrr.length;
+        }, 2000);
+      }
 
-        // Listen to online and offline events
-        window.addEventListener('online', updateNetworkStatus);
-        window.addEventListener('offline', updateNetworkStatus);
+      // Function to stop the image slider
+      function stopSlider() {
+        if (timeout) {
+          clearInterval(timeout); // Stop the interval
+          timeout = null; // Reset the timeout reference
+        }
+      }
 
-        // Initial check on page load
-        window.onload = function () {
-            const BASE_URL = "https://react.tjcg.in"; // Updated BASE_URL with host and port
-            const SCREEN_ID = "999036"; // This is the screen number as per your screen_data
-            const PLAYER_ID = "66f394e3b1784200139291ba"; // Player ID from screen_data
+      // Update the network status
+      function updateNetworkStatus() {
+        const isOnline = navigator.onLine;
+        const networkStatusText = document.getElementById("network-status");
+        // Set network status message
+        if (isOnline) {
+          document.getElementById("internet-status").textContent = "ONLINE";
+        } else {
+          document.getElementById("internet-status").textContent = "OFFLINE";
+        }
+      }
 
-            // Connect to the socket.io server
-            const socket = io(BASE_URL, {
-                path: "/socket.live",
-                query: {
-                    screenNo: SCREEN_ID,
-                },
-                transports: ["websocket"],
-            });
+      // Window onload function
+      window.onload = function () {
+        document.getElementById("image-slider").style.display = "none";
+        const BASE_URL = "https://react.tjcg.in"; // Updated BASE_URL with host and port
+        const SCREEN_ID = "999036"; // This is the screen number as per your screen_data
+        // Call the function to update the playlist with images and start the fade-in effect
+        // Connect to the socket.io server
+        const socket = io(BASE_URL, {
+          path: "/socket.live",
+          query: {
+            screenNo: SCREEN_ID,
+          },
+          transports: ["websocket"],
+        });
 
+        // When the connection is established
+        socket.on("connect", function (response) {
+          console.log("Socket connected to server", response);
+          document.getElementById("server-status").textContent =
+            "Socket connected to server";
+        });
 
+        socket.on("use_our_template_data", function (data) {
+          console.log("GET:::use_our_template_data", data);
+        });
+        socket.on("playlist_data", function (data) {
+          console.log("GET::: playlist_data", data);
+          stopSlider();
+          console.log(data.playlist);
+          startSlider(data.playlist);
+        });
 
-            // When the connection is established
-            socket.on('connect', function (response) {
-                // document.getElementById("message").textContent = "Paired and ready to receive the content";
-                console.log("Socket connected to server", response);
-                document.getElementById("server-status").textContent = "Socket connected to server";
+        socket.on("playlist_data", function (data) {
+          console.log("GET::: playlist_data", data);
+        });
+        socket.on("CHECK_ONLINE_STATUS", function (data) {
+          console.log("GET::: CHECK_ONLINE_STATUS", data);
+        });
+        socket.on("CLOSE_SCREEN_APP", function (data) {
+          console.log("GET::: CLOSE_SCREEN_APP", data);
+        });
+        socket.on("UPGRADE_SCREEN_APP", function (data) {
+          console.log("GET::: UPGRADE_SCREEN_APP", data);
+        });
+        socket.on("ROTATE_SCREEN", function (data) {
+          console.log("GET::: ROTATE_SCREEN", data);
+        });
+        socket.on("RESET_SCREEN_APP", function (data) {
+          console.log("GET::: RESET_SCREEN_APP", data);
+        });
+        socket.on("RELOAD_PLAYER_APP", function (data) {
+          console.log("GET::: RELOAD_PLAYER_APP", data);
+        });
+        socket.on("TAKE_SCREEN_SNAP_SHOT", function (data) {
+          console.log("GET::: TAKE_SCREEN_SNAP_SHOT", data);
+        });
+        socket.on("USER_REBOOT_APP", function (data) {
+          console.log("GET::: USER_REBOOT_APP", data);
+        });
+        socket.on("SHUTDOWN_SYSTEM", function (data) {
+          console.log("GET::: SHUTDOWN_SYSTEM", data);
+        });
+        socket.on("LAUNCH_SCREEN_APP", function (data) {
+          console.log("GET::: LAUNCH_SCREEN_APP", data);
+        });
+        socket.on("UPLOAD_NEW_APK_FILE", function (data) {
+          console.log("GET::: UPLOAD_NEW_APK_FILE", data);
+        });
+        socket.on("UPLOAD_ROOT_APP_FILE", function (data) {
+          console.log("GET::: UPLOAD_ROOT_APP_FILE", data);
+        });
+        socket.on("UPLOAD_COMMEND", function (data) {
+          console.log("GET::: UPLOAD_COMMEND", data);
+        });
+        socket.on("ADD_EDIT_TV_SCHEDULER", function (data) {
+          console.log("GET::: ADD_EDIT_TV_SCHEDULER", data);
+        });
+        socket.on("screen_data", function (data) {
+          console.log("GET::: screen_data", data);
+        });
+        socket.on("custom_layout_data", function (data) {
+          console.log("GET::: custom_layout_data", data);
+        });
+        socket.on("playlist_data", function (data) {
+          console.log("GET::: playlist_data", data);
+        });
+        socket.on("use_our_template_data", function (data) {
+          console.log("GET::: use_our_template_data", data);
+        });
+        socket.on("update_media_in_screen", function (data) {
+          console.log("GET::: update_media_in_screen", data);
+        });
 
-                // Send the screen_data to the backend after connection
-                // const screenData = {
-                //     ScreenNo: SCREEN_ID,
-                //     PlayerId: PLAYER_ID,
+        // Update network status initially
+        updateNetworkStatus();
+      };
 
-                // };
-                // socket.emit('screen_data', screenData);
-            });
-
-            socket.on('screen_data', function (data) {
-                console.log("GET:::", data)
-            });
-
-            socket.on('playlist_data', function (data) {
-                console.log("GET::: playlist", data)
-            });
-
-
-
-            updateNetworkStatus();
-        };
+      // Listen to online and offline events
+      window.addEventListener("online", updateNetworkStatus);
+      window.addEventListener("offline", updateNetworkStatus);
     </script>
-</body>
-
+  </body>
 </html>
