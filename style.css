@@ -44,12 +44,6 @@ body {
     padding: 10px;
 }
 .image-slider-div{
-    width: 1920px;
-    height: 1080px;
-    background :yellow;
-    padding: 20px;
-    border: 10px solid white;
-    position: absolute;
     z-index: 2;
 }
 .screen-id{

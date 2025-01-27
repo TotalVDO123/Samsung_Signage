@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Signage | Menu Online</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="landing-page" id="landingPage">
+    <div class="net-server">
+      <div class="net">
+        <span>Internet : </span> <span id="internet-status">NO</span>
+      </div>
+      <div class="server">
+        <span>Server : </span> <span id="server-status">DOWN</span>
+      </div>
+    </div>
+    <div class="screen-id"><span>Screen ID: </span> <span>999036</span></div>
+    <div class="image-slider-div" id="image-slider">
+      <img id="slider-image" src="" />
+    </div>
+    <div class="image-slider-div" id="custom-layout">
+
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+
+  <script>
+    var timeout = null;
+
+    function makeSliderPlaylist(arg) {
+      var final = {};
+      final['time'] = arg[0].duration;
+      final['imageList'] = [];
+      for (var r = 0; r < arg.length; r++) {
+        if (arg[r].isIncluded) {
+          var tmp = arg[r].mediaId;
+          tmp = encodeURI(tmp);
+          final['imageList'].push(tmp);
+        }
+      }
+      console.log(final);
+      return final;
+    }
+
+    function startSlider(arg) {
+      document.getElementById("image-slider").style.display = "block";
+      var index = 0;
+      document.getElementById("slider-image").src = arg.imageList[arg.imageList.length - 1];
+      timeout = setInterval(() => {
+        document.getElementById("slider-image").src = arg.imageList[index];
+        index = (index + 1);
+        if (index == arg.imageList.length) index = 0;
+      }, arg.time * 1000);
+    }
+
+    function stopSlider() {
+      if (timeout) {
+        clearInterval(timeout);
+        timeout = null;
+      }
+    }
+
+    function updateNetworkStatus() {
+      const isOnline = navigator.onLine;
+      if (isOnline) {
+        document.getElementById("internet-status").textContent = "ONLINE";
+      } else {
+        document.getElementById("internet-status").textContent = "OFFLINE";
+      }
+    }
+
+    function appendChildDiv(parentId, x, y, width, height, color, childId) {
+      var parentDiv = document.getElementById(parentId);
+      var childDiv = document.createElement('div');
+      childDiv.id = childId;
+      childDiv.style.position = 'absolute';
+      childDiv.style.top = y + 'px';
+      childDiv.style.left = x + 'px';
+      childDiv.style.width = width + 'px';
+      childDiv.style.height = height + 'px';
+      childDiv.style.backgroundColor = color;
+      parentDiv.appendChild(childDiv);
+    }
+
+    function displayImagePlaylist(arr, divId) {
+      var currentIndex = 0;
+      var container = document.getElementById(divId);
+      function showNextImage() {
+        if (currentIndex >= arr.length) {
+          currentIndex = 0;
+        }
+        var image = new Image();
+        image.src = arr[currentIndex].imageurl;
+        image.alt = 'Playlist Image';
+        image.style.objectFit = 'contain';
+        image.style.width = '100%';
+        image.style.height = '100%';
+        image.style.zIndex = 5;
+        container.innerHTML = '';
+        container.appendChild(image);
+        console.log('show image', arr[currentIndex].imageurl);
+        currentIndex++;
+        setTimeout(showNextImage, arr[currentIndex - 1].time * 1000);
+      }
+      showNextImage();
+    }
+
+    function displayMediaPlaylist(arr, divId) {
+      var currentIndex = 0;
+      var container = document.getElementById(divId);
+      function showNextMedia() {
+        var mediaItem = arr[currentIndex];
+        var mediaElement;
+
+        if (mediaItem.type === "VIDEO") {
+          mediaElement = document.createElement('video');
+          mediaElement.src = mediaItem.imageurl;
+          mediaElement.style.width = '99%';
+          mediaElement.style.height = '99%';
+          mediaElement.muted = true;
+          mediaElement.controls = true;
+          mediaElement.autoplay = true;
+          mediaElement.loop = true;
+        } else if (mediaItem.type === "IMAGE") {
+          mediaElement = new Image();
+          mediaElement.src = mediaItem.imageurl;
+          mediaElement.style.objectFit = 'contain';
+          mediaElement.style.width = '99%';
+          mediaElement.style.height = '99%';
+        }
+
+        container.innerHTML = '';
+        container.appendChild(mediaElement);
+
+        if (arr.length === 1) {
+          setTimeout(showNextMedia, mediaItem.time * 1000);
+        } else {
+          currentIndex = (currentIndex + 1) % arr.length;
+          setTimeout(showNextMedia, mediaItem.time * 1000);
+        }
+      }
+      showNextMedia();
+    }
+
+    function makeVideoImagePlaylist(arr) {
+      var ark = [];
+      arr.forEach(function (item) {
+        var tmp = {};
+        tmp['imageurl'] = encodeURI(item.original_url);
+        tmp['time'] = item.time;
+        tmp['type'] = item.type;
+        ark.push(tmp);
+      });
+      return ark;
+    }
+
+    window.onload = function () {
+      document.getElementById("image-slider").style.display = "none";
+      const BASE_URL = "https://react.tjcg.in";
+      const SCREEN_ID = "999036";
+
+      var data_ = {
+        "_id": "678160b14fb1815c853d0c28",
+        "layout": [
+          {
+            "fill": "#FF6633",
+            "height": 175,
+            "id": "1",
+            "repeat": true,
+            "width": 250,
+            "x": 0,
+            "y": 0,
+            "media": [
+              {
+                "base64_data": "",
+                "original_file_name": "Untitled Design_12184648",
+                "type": "IMAGE",
+                "time": 20,
+                "original_url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_12184648.jpeg?path=1"
+              },
+              {
+                "base64_data": "",
+                "original_file_name": "Untitled Design_63315189",
+                "type": "IMAGE",
+                "time": 26,
+                "original_url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_63315189.jpeg?path=1"
+              }
+            ]
+          },
+          {
+            "fill": "#FFFF99",
+            "height": 175,
+            "id": {
+              "id": 2
+            },
+            "repeat": true,
+            "width": 250,
+            "x": 250,
+            "y": 0,
+            "media": [
+              {
+                "base64_data": "",
+                "original_file_name": "5747359-uhd_3840_2160_25fps.mp4",
+                "type": "VIDEO",
+                "time": 10,
+                "original_url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720773209255_5966.mp4?path=1"
+              }
+            ]
+          },
+          {
+            "fill": "#00B3E6",
+            "height": 175,
+            "id": {
+              "id": 3
+            },
+            "repeat": true,
+            "width": 250,
+            "x": 2,
+            "y": 175,
+            "media": [
+              {
+                "base64_data": "",
+                "original_file_name": "3196344-uhd_3840_2160_25fps (1).mp4",
+                "type": "VIDEO",
+                "time": 14,
+                "original_url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720610216298_7155.mp4?path=1"
+              }
+            ]
+          },
+          {
+            "fill": "#E6B333",
+            "height": 175,
+            "id": {
+              "id": 4
+            },
+            "repeat": true,
+            "width": 250,
+            "x": 250,
+            "y": 175,
+            "media": [
+              {
+                "base64_data": "",
+                "original_file_name": "Untitled Design_61972383",
+                "type": "IMAGE",
+                "time": 20,
+                "original_url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_61972383.jpeg?path=1"
+              }
+            ]
+          }
+        ],
+        "isVertical": false,
+        "userId": "620c74aab1f48f709b5ddbea",
+        "imageUrl": [
+          {
+            "name": "Untitled Design_12184648",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_12184648.jpeg?path=1"
+          },
+          {
+            "name": "Untitled Design_63315189",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_63315189.jpeg?path=1"
+          },
+          {
+            "name": "5747359-uhd_3840_2160_25fps.mp4",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720773209255_5966.mp4?path=1"
+          },
+          {
+            "name": "3196344-uhd_3840_2160_25fps (1).mp4",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720610216298_7155.mp4?path=1"
+          },
+          {
+            "name": "Untitled Design_61972383",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_61972383.jpeg?path=1"
+          }
+        ],
+        "type": "CUSTOM_LAYOUT",
+        "imageOfflineUrl": [
+          {
+            "isPixabay": true,
+            "name": "Untitled Design_12184648",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_12184648.jpeg?path=1"
+          },
+          {
+            "isPixabay": true,
+            "name": "Untitled Design_63315189",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_63315189.jpeg?path=1"
+          },
+          {
+            "isPixabay": true,
+            "name": "5747359-uhd_3840_2160_25fps.mp4",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720773209255_5966.mp4?path=1"
+          },
+          {
+            "isPixabay": true,
+            "name": "3196344-uhd_3840_2160_25fps (1).mp4",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/1720610216298_7155.mp4?path=1"
+          },
+          {
+            "isPixabay": true,
+            "name": "Untitled Design_61972383",
+            "url": "https://cdn.menuonline.com/preview/mycircle-digital-signage-2/test-user-media/620c74aab1f48f709b5ddbea/Untitled Design_61972383.jpeg?path=1"
+          }
+        ]
+      }
+
+      for (var k = 0; k < data_.layout.length; k++) {
+        var SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
+        var X = SCREEN_WIDTH * data_.layout[k].x / 500
+        var WIDTH = SCREEN_WIDTH * data_.layout[k].width / 500
+        Y = SCREEN_HEIGHT * data_.layout[k].y / 350
+        var HEIGHT = SCREEN_HEIGHT * data_.layout[k].height / 350
+        appendChildDiv("custom-layout", X, Y, WIDTH, HEIGHT, data_.layout[k].fill, "child" + k);
+      }
+
+      for (var w = 0; w < data_.layout.length; w++) {
+        displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w);
+      }
+
+      const socket = io(BASE_URL, {
+        path: "/socket.live",
+        query: {
+          screenNo: SCREEN_ID,
+        },
+        transports: ["websocket"],
+      });
+
+      socket.on("connect", function (response) {
+        console.log("Socket connected to server", response);
+        document.getElementById("server-status").textContent =
+          "Socket connected to server";
+      });
+
+      socket.on("use_our_template_data", function (data) {
+        console.log("GET:::use_our_template_data", data);
+      });
+      socket.on("playlist_data", function (data) {
+        console.log("GET::: playlist_data", data);
+        stopSlider();
+        startSlider(makeSliderPlaylist(data.playlist));
+      });
+
+      socket.on("CHECK_ONLINE_STATUS", function (data) {
+        console.log("GET::: CHECK_ONLINE_STATUS", data);
+      });
+      socket.on("CLOSE_SCREEN_APP", function (data) {
+        console.log("GET::: CLOSE_SCREEN_APP", data);
+      });
+      socket.on("UPGRADE_SCREEN_APP", function (data) {
+        console.log("GET::: UPGRADE_SCREEN_APP", data);
+      });
+      socket.on("ROTATE_SCREEN", function (data) {
+        console.log("GET::: ROTATE_SCREEN", data);
+      });
+      socket.on("RESET_SCREEN_APP", function (data) {
+        console.log("GET::: RESET_SCREEN_APP", data);
+      });
+      socket.on("RELOAD_PLAYER_APP", function (data) {
+        console.log("GET::: RELOAD_PLAYER_APP", data);
+      });
+      socket.on("TAKE_SCREEN_SNAP_SHOT", function (data) {
+        console.log("GET::: TAKE_SCREEN_SNAP_SHOT", data);
+      });
+      socket.on("USER_REBOOT_APP", function (data) {
+        console.log("GET::: USER_REBOOT_APP", data);
+      });
+      socket.on("SHUTDOWN_SYSTEM", function (data) {
+        console.log("GET::: SHUTDOWN_SYSTEM", data);
+      });
+      socket.on("LAUNCH_SCREEN_APP", function (data) {
+        console.log("GET::: LAUNCH_SCREEN_APP", data);
+      });
+      socket.on("UPLOAD_NEW_APK_FILE", function (data) {
+        console.log("GET::: UPLOAD_NEW_APK_FILE", data);
+      });
+      socket.on("UPLOAD_ROOT_APP_FILE", function (data) {
+        console.log("GET::: UPLOAD_ROOT_APP_FILE", data);
+      });
+      socket.on("UPLOAD_COMMEND", function (data) {
+        console.log("GET::: UPLOAD_COMMEND", data);
+      });
+      socket.on("ADD_EDIT_TV_SCHEDULER", function (data) {
+        console.log("GET::: ADD_EDIT_TV_SCHEDULER", data);
+      });
+      socket.on("screen_data", function (data) {
+        console.log("GET::: screen_data", data);
+      });
+      socket.on("PLAYLIST_UPDATE", function (data) {
+        console.log("GET::: PLAYLIST_UPDATE", data);
+      });
+      socket.on("SHOW_MESSAGE", function (data) {
+        console.log("GET::: SHOW_MESSAGE", data);
+      });
+      socket.on("CLOSE_PLAYER_APP", function (data) {
+        console.log("GET::: CLOSE_PLAYER_APP", data);
+      });
+
+      socket.on("disconnect", function (data) {
+        console.log("Socket disconnected", data);
+        document.getElementById("server-status").textContent =
+          "Socket disconnected from server";
+      });
+
+      updateNetworkStatus();
+      window.addEventListener("online", updateNetworkStatus);
+      window.addEventListener("offline", updateNetworkStatus);
+    };
+  </script>
+</body>
+
+</html>
