@@ -19,7 +19,7 @@
         <span>Server : </span> <span id="server-status">DOWN</span>
       </div>
     </div>
-    <div class="screen-id"><span>Screen ID: </span> <span>999036</span></div>
+    <div class="screen-id"><span>Screen ID: </span> <span id="screen-id"></span></div>
     <div class="image-slider-div" id="image-slider">
       <img id="slider-image" src="" />
     </div>
@@ -48,7 +48,7 @@
       var container = document.getElementById(divId);
       function showNextMedia() {
         var mediaItem = arr[currentIndex];
-        var mediaElement;       
+        var mediaElement;
         if (mediaItem.type === "VIDEO") {
           mediaElement = document.createElement('video');
           mediaElement.src = mediaItem.imageurl;
@@ -71,16 +71,16 @@
         container.appendChild(mediaElement);
 
         if (arr.length === 1) {
-         setTimeout(showNextMedia, mediaItem.time * 1000);
-        
+          setTimeout(showNextMedia, mediaItem.time * 1000);
+
         } else {
-          if(currentIndex == arr.length-1){
-            currentIndex =0;
-          }else{
+          if (currentIndex == arr.length - 1) {
+            currentIndex = 0;
+          } else {
             currentIndex = currentIndex + 1;
-          }          
-         setTimeout(showNextMedia, mediaItem.time * 1000);
-        
+          }
+          setTimeout(showNextMedia, mediaItem.time * 1000);
+
         }
       }
       showNextMedia();
@@ -98,11 +98,28 @@
       return ark;
     }
 
-    window.onload = function () {
-      document.getElementById("image-slider").style.display = "none";
-      const BASE_URL = "https://react.tjcg.in";
-      const SCREEN_ID = "999036";
+    function checkIsPrevId() {
+      var OldData = localStorage.getItem("profile");
+      if (OldData) {
+        return true;
+      } else {
+        return false;
+      }
 
+    }
+
+    function setUserProfile() {
+      localStorage.setItem("profile", "Smith");
+    }
+
+    function clearUserProfile() {
+
+    }
+
+
+    function doSocket(SCREEN_ID) {
+      console.log(SCREEN_ID);
+      const BASE_URL = "https://react.tjcg.in";
       const socket = io(BASE_URL, {
         path: "/socket.live",
         query: {
@@ -110,32 +127,16 @@
         },
         transports: ["websocket"],
       });
-
+      document.getElementById("screen-id").textContent = SCREEN_ID;
       socket.on("connect", function (response) {
         console.log("Socket connected to server", response);
-        document.getElementById("server-status").textContent =
-          "Socket connected to server";
+        document.getElementById("server-status").textContent = "Ready to recieve Ads";
       });
-
-      socket.on("custom_layout_data", function (data_) {
-        console.log("GET::: custom_layout_data", data_);
-        for (var k = 0; k < data_.layout.length; k++) {
-          var SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
-          var X = SCREEN_WIDTH * data_.layout[k].x / 500
-          var WIDTH = SCREEN_WIDTH * data_.layout[k].width / 500
-          Y = SCREEN_HEIGHT * data_.layout[k].y / 350
-          var HEIGHT = SCREEN_HEIGHT * data_.layout[k].height / 350
-          appendChildDiv("custom-layout", X, Y, WIDTH, HEIGHT, data_.layout[k].fill, "child" + k);
-        }
-
-        for (var w = 0; w < data_.layout.length; w++) {
-          console.log(makeVideoImagePlaylist(data_.layout[w].media));
-          displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w);
-        }
-
+      socket.on("screen_data", function (data) {
+        document.getElementById("server-status").textContent = "Device Added to Server";
+        console.log("GET::: screen_data", data);
+        localStorage.setItem("profile", JSON.stringify(data));
       });
-
-
       socket.on("use_our_template_data", function (data) {
         console.log("GET:::use_our_template_data", data);
       });
@@ -144,7 +145,6 @@
         stopSlider();
         startSlider(makeSliderPlaylist(data.playlist));
       });
-
       socket.on("CHECK_ONLINE_STATUS", function (data) {
         console.log("GET::: CHECK_ONLINE_STATUS", data);
       });
@@ -187,10 +187,6 @@
       socket.on("ADD_EDIT_TV_SCHEDULER", function (data) {
         console.log("GET::: ADD_EDIT_TV_SCHEDULER", data);
       });
-      socket.on("screen_data", function (data) {
-        console.log("GET::: screen_data", data);
-      });
-
       socket.on("disconnect", function (data) {
         console.log("Socket disconnected", data);
         document.getElementById("server-status").textContent =
@@ -202,11 +198,34 @@
       socket.on("update_media_in_screen", function (data) {
         console.log("GET::: update_media_in_screen", data);
       });
+    }
 
+    window.onload = function () {
+      document.getElementById("image-slider").style.display = "none";
+      const SCREEN_ID = "999036";
+      if (checkIsPrevId()) {
+        console.log('profile found');
+        var OldData = localStorage.getItem("profile");
+        if (OldData) {
+          var profileObject = JSON.parse(OldData);
+          document.getElementById("screen-id").textContent = profileObject.screenNumber;
+          doSocket(profileObject.screenNumber);
+        }
+      } else {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            doSocket(response.screenNumber);
+          }
+        };
+        xhttp.open("GET", "https://react.tjcg.in/api/generate-screen-id?number=000000", true);
+        xhttp.send();
+      }
       updateNetworkStatus();
       window.addEventListener("online", updateNetworkStatus);
       window.addEventListener("offline", updateNetworkStatus);
-    };
+    }
   </script>
 </body>
 
