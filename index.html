@@ -11,7 +11,7 @@
 
 <body>
   <div class="landing-page" id="landingPage">
-    <div class="net-server">
+    <div class="net-server" id="net-server">
       <div class="net">
         <span>Internet : </span> <span id="internet-status">NO</span>
       </div>
@@ -19,7 +19,7 @@
         <span>Server : </span> <span id="server-status">DOWN</span>
       </div>
     </div>
-    <div class="screen-id"><span>Screen ID: </span> <span id="screen-id"></span></div>
+    <div class="screen-id" id="screen-div-id"><span>Screen ID: </span> <span id="screen-id"></span></div>
     <div class="image-slider-div" id="image-slider">
       <img id="slider-image" src="" />
     </div>
@@ -116,6 +116,14 @@
 
     }
 
+    function hideOterDetails(){
+      
+      
+      document.getElementById("net-server").style.display = "none";
+      document.getElementById("screen-div-id").style.display = "none";
+
+    }
+
 
     function doSocket(SCREEN_ID) {
       console.log(SCREEN_ID);
@@ -144,6 +152,25 @@
         console.log("GET::: playlist_data", data);
         stopSlider();
         startSlider(makeSliderPlaylist(data.playlist));
+        hideOterDetails();
+      });
+      socket.on("custom_layout_data", function (data_) {
+        console.log("GET::: custom_layout_data", data_);
+        hideOterDetails();
+        for (var k = 0; k < data_.layout.length; k++) {
+          var SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
+          var X = SCREEN_WIDTH * data_.layout[k].x / 500
+          var WIDTH = SCREEN_WIDTH * data_.layout[k].width / 500
+          Y = SCREEN_HEIGHT * data_.layout[k].y / 350
+          var HEIGHT = SCREEN_HEIGHT * data_.layout[k].height / 350
+          appendChildDiv("custom-layout", X, Y, WIDTH, HEIGHT, data_.layout[k].fill, "child" + k);
+        }
+
+        for (var w = 0; w < data_.layout.length; w++) {
+          console.log(makeVideoImagePlaylist(data_.layout[w].media));
+          displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w);
+        }
+
       });
       socket.on("CHECK_ONLINE_STATUS", function (data) {
         console.log("GET::: CHECK_ONLINE_STATUS", data);
