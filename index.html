@@ -11,11 +11,11 @@
 
 <body>
   <div class="landing-page" id="landingPage">
+    <div class="screen-id" id="screen-div-id"> <span id="screen-id"></span></div>
     <div id="button-div" style="height: 85px;">
       <button class="button-cl" id="reset">RESET</button>
       <button class="button-cl" id="close">CLOSE</button>
     </div>
-    <div class="screen-id" id="screen-div-id"> <span id="screen-id"></span></div>
     <div id="internet-status" class="net"> </div>
     <div class="server" id="">
       <span id="server-status"></span>
@@ -32,7 +32,6 @@
   <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 
   <script>
-
     function appendChildDiv(parentId, x, y, width, height, color, childId) {
       var parentDiv = document.getElementById(parentId);
       var childDiv = document.createElement('div');
@@ -217,6 +216,7 @@
         console.log("Socket disconnected", data);
         document.getElementById("server-status").textContent =
           "Socket disconnected from server";
+          document.getElementById("internet-status").style.display = "block";
       });
       socket.on("use_our_template_data", function (data) {
         showsingleImage( encodeURI(data.image_url));
@@ -232,9 +232,17 @@
       document.body.addEventListener('keydown', function (event) {
         console.log(event.keyCode);
         if (event.keyCode == 39) {
-          document.getElementById('reset').focus();
+          if(document.activeElement.getAttribute('id') == 'close'){
+          document.getElementById('reset').focus();}
+         else if(document.activeElement.getAttribute('id') == 'noButton'){
+            document.getElementById('yesButton').focus();
+          }
         } else if (event.keyCode == 37) {
-          document.getElementById('close').focus();
+          if (document.activeElement.getAttribute('id') == 'reset') {
+          document.getElementById('close').focus();}
+          else if(document.activeElement.getAttribute('id') == 'yesButton'){
+            document.getElementById('noButton').focus();
+          }
         } else if (event.keyCode == 13) {
           if (document.activeElement.getAttribute('id') == 'reset') {
             localStorage.clear();
@@ -246,6 +254,21 @@
             console.log('close');
             tizen.application.getCurrentApplication().exit();
           }
+          else if (document.activeElement.getAttribute('id') == 'noButton') {
+            console.log('noButton');
+            document.getElementById("exit_modal").style.display = "none";
+            document.getElementById('reset').focus();
+          }
+          else if (document.activeElement.getAttribute('id') == 'yesButton') {
+            console.log('yesButton');
+            tizen.application.getCurrentApplication().exit();
+          }
+        } else if (event.keyCode == 10009) {
+          console.log("exit app");
+          //$(".exit_modal").show();
+          document.getElementById("exit_modal").style.display = "block";
+          document.getElementById('noButton').focus();
+
         }
       });
 
@@ -288,6 +311,17 @@
 
     }
   </script>
+  <!-- Start of Exit Modal -->
+<div class="exit_modal mod_bg_color active" id="exit_modal" style="display:none;">
+  <h2 class="popup_headline mod_text_color">Are you sure you want to exit application?</h2>
+  <div class="popup_btn" id="exitModal">
+      <button tabindex="8" id="noButton" data-sn-up="null" data-sn-down="null" data-sn-left="null"
+          data-sn-right="#yesButton" class="no_button mod_button_sel focusable pointer_enable">No</button>
+
+      <button tabindex="8" id="yesButton" data-sn-up="null" data-sn-down="null" data-sn-left="#noButton"
+          data-sn-right="null" class="yes_button mod_button_un_sel focusable pointer_enable">Yes</button>
+  </div>
+</div>
 </body>
 
 </html>
