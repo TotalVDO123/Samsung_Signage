@@ -24,13 +24,13 @@ UOFkMrvkjg==</DigestValue>
 </Reference>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>FAPKIcjhtRymtrChlAolYbTGREpAKDp9XiBC1d2E5Vjq77jicMy0YK9tMNlTvSJN9KEBHx7KyXDK
-9jZb5RMLHA==</DigestValue>
+<DigestValue>nGre83eqEg9PxghtChXaZQ2Bo1dYAre2+cfcMDHIwiotaDpvbqRLRTYY0jiGEjvIKMEAbGbxJPkX
+ERWmghiujw==</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>F98XFmTejGCcIuXVxEqS6azPws/sDrND8HAo5FGKTdr8D/6fYzkvlKYfPLLPayAROe7m5VQ6D+kd
-6Laz2w1VXQ==</DigestValue>
+<DigestValue>RfAXC+j40FWEAgC4QcDRgVPgSQH1o2ww0TDB2jX5DnOc3cQCFA+OgMA5obPUpTd6L2Zgz7ksP7Tw
+s/dTLYKmJg==</DigestValue>
 </Reference>
 <Reference URI="css%2Fstyle.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
@@ -42,20 +42,35 @@ UOFkMrvkjg==</DigestValue>
 <DigestValue>GKaAX2XA1x2ytXpunzpCzpNiM6szLhEWk+UyKGzAgx6iEs49HNlzLVsTXm2dYiWvEZiiTMz2U6lh
 WCLpOpkL0w==</DigestValue>
 </Reference>
+<Reference URI="images%2Fbg4.jpeg">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
+<DigestValue>aq7BKmn3V1Xu3xtDwYSsfqYwxTUzlqwpCY4zhqRtqfUk/lldnvL05d5v75fxSOZDpmP39+KmQl6H
+gi5NL/h3RQ==</DigestValue>
+</Reference>
 <Reference URI="images%2Fbg4.jpg">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
+<DigestValue>v0AKX4/wiH9eGsyIruLltAQl32GTMBoqNFe0kDjKUO8e389ddf4XLcDBvjwQ7nFtU1gVuZUjAIAv
+2SJh8yNt4g==</DigestValue>
+</Reference>
+<Reference URI="images%2Fbg43.jpg">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
 <DigestValue>v0AKX4/wiH9eGsyIruLltAQl32GTMBoqNFe0kDjKUO8e389ddf4XLcDBvjwQ7nFtU1gVuZUjAIAv
 2SJh8yNt4g==</DigestValue>
 </Reference>
 <Reference URI="imgpsh_fullsize_anim.jpeg">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
+<DigestValue>9J7mG9CIjBPMCKT6yltMeWxHvFkC+tvS831l9fyVnTASTPmDyz+5IG2vHlipgrHC05ljkUBnrRZP
+z2VuuOga6Q==</DigestValue>
+</Reference>
+<Reference URI="imgpsh_fullsize_anim5.jpeg">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
 <DigestValue>74/12Q413kZEYWCamFWs6/84z+Fb2gk/wkNH9WN9gXJQI31+Usq61qIMFc0RBL2+65zGC21mlhqy
 2+2BSwq7FQ==</DigestValue>
 </Reference>
 <Reference URI="index.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>0fFCqkwi0Falpx0C8WA2/70mPFtNu1vCf6R++x0ekoiIm0kVkz7G24vfzGeuIqL/bK9Ad6luM2VZ
-OaNgTevPLA==</DigestValue>
+<DigestValue>AIb909Jo4jqJ++7eI0oXQJXevXYbQ45b2ML7XvrXMhsbX7zBgDt+oXl4Vx5IzayuFNYU32L6J0d1
+NgXb2SzRAQ==</DigestValue>
 </Reference>
 <Reference URI="index2.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
@@ -69,8 +84,8 @@ f+JZeZpJ3A==</DigestValue>
 </Reference>
 <Reference URI="style.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>kINguWAj8JJImezzVVCKw+4gkdAjLLpc6GC0rzchsP2bPxLu7Msu8fniusXifGHs+HTqx+OarQrI
-3XTv9UcnnQ==</DigestValue>
+<DigestValue>I4yAbn20RCxg6TxdT8VXPzHcNs3aXfzNUelWV6XHlVbENGs7BhNDcBNmVl4GXC9Od3zmCkeqF4jS
+K+YceyG/PQ==</DigestValue>
 </Reference>
 <Reference URI="#prop">
 <Transforms>
@@ -82,11 +97,11 @@ GyvKX9Snig==</DigestValue>
 </Reference>
 </SignedInfo>
 <SignatureValue>
-GXw4ALt7jtdVhF4DlwzOemU4ypW24oY2O9gtOUS8H8EcZ1AMbjgbKTl0+1H9q422kehlxrQASnjN
-DYVE0JeVgvz01I9Lzm4+cg2Nl6zIji+XPi4TJdBDk6Pmm85AwHDPLEGzUJdfFpozgiVZ7g+vq/YU
-GT3YcKdVAR28HSfG+4vBurUPiBfkvsOHBHMdfdj8trPk40Ydph52Cb/xL2bS0PLAplu1EVOObFLs
-+nu17vbiSfFhVAW40NkLnjCvGwT0EKIZoaKystVeJicOClqpkD3dKmTld8r+ZtGC7GUFZLHUTjJE
-tZD/6Ix8Md3SoGnBhgSqyUVYLg/ZUi5/e4y9zw==
+nx3ehKxFYBBcsg0kjQ1X8dYX+5W45Qw5hV5ZxIqC6+PORyOL6GTH7WqW8wO/AlsmCiJh9ZIooUbu
+PpyLK5ieZlxamB8zI31paMy5pgFzkYvm4BVHEq/ZlLkIbw45rbSg2krON3O3QwPs41gh23CNuQxJ
+I4OAp7GSkmLmITFyjIkH3mHKeujmmN+E0Vg1TKFtml3ODUpKFn6Pwu+3YflNnBNT8nI/68MnrF6C
+H8bub8DQ2qML5uXsKbLtvrGj/3n/it9dGZN7Y9+bb3M+2sxsFLO5Bpo3/ZFmqxBKorBQiSSwfU64
+e6Hx0ISJ8yp/l+1wwtFDYTRkDDXr0PtElA3xVA==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
