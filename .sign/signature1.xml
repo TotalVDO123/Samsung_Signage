@@ -24,13 +24,13 @@ UOFkMrvkjg==</DigestValue>
 </Reference>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>nGre83eqEg9PxghtChXaZQ2Bo1dYAre2+cfcMDHIwiotaDpvbqRLRTYY0jiGEjvIKMEAbGbxJPkX
-ERWmghiujw==</DigestValue>
+<DigestValue>lNy8irJmly3mBqT6RuEbssG8rKtudhVtpEN9HB7SsJMdtLS9DNb86OAv/v+ETy2Y0LmRt1qid6Oj
+hxi/QUq9+g==</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>RfAXC+j40FWEAgC4QcDRgVPgSQH1o2ww0TDB2jX5DnOc3cQCFA+OgMA5obPUpTd6L2Zgz7ksP7Tw
-s/dTLYKmJg==</DigestValue>
+<DigestValue>CNWvt7EmgDRuppxIOllknNi8w4rwLwZYseADNPE5M59VQPDeWTsbS42j598b+uC38xtbooUgT4Ql
+U+g6654GZw==</DigestValue>
 </Reference>
 <Reference URI="css%2Fstyle.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
@@ -97,11 +97,11 @@ GyvKX9Snig==</DigestValue>
 </Reference>
 </SignedInfo>
 <SignatureValue>
-nx3ehKxFYBBcsg0kjQ1X8dYX+5W45Qw5hV5ZxIqC6+PORyOL6GTH7WqW8wO/AlsmCiJh9ZIooUbu
-PpyLK5ieZlxamB8zI31paMy5pgFzkYvm4BVHEq/ZlLkIbw45rbSg2krON3O3QwPs41gh23CNuQxJ
-I4OAp7GSkmLmITFyjIkH3mHKeujmmN+E0Vg1TKFtml3ODUpKFn6Pwu+3YflNnBNT8nI/68MnrF6C
-H8bub8DQ2qML5uXsKbLtvrGj/3n/it9dGZN7Y9+bb3M+2sxsFLO5Bpo3/ZFmqxBKorBQiSSwfU64
-e6Hx0ISJ8yp/l+1wwtFDYTRkDDXr0PtElA3xVA==
+lH0m5I9KkprG3OhRnvIE9Xb/z3aV4II0HHKBP3YnT7Utp835DUdSImgTe9B5AjbUPfcdWIJj+k/C
+j/qDpkPpBjMpBlck8AHNzSiINvRR6KT67V0lhx6YtInuUo6luQxQUxihq536Y1GCnJAMB7Z8mbgn
+IGXHySWiRpfDY8A78m/bWszrlVueMgCDHi+APzYO8RYCzTNBhGfpHdWO+xfIlGbA8bkvfS2CAl1M
+hNqab1TKUzj93QiEQIKT7hDptkC5gHp24SEXVWi2Sc7atnQVGgB1G29ln8losCseSgoIXNOP0QrT
+d/Qatf8MMq9U+Cc7v4hH9kBbueYWlO2D4JaiSw==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

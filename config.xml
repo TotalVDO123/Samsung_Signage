@@ -3,14 +3,14 @@
     <access origin="*" subdomains="true"></access>
     <access origin="https://menuonline.com/" subdomains="true"></access>
     <access origin="*" subdomains="true"></access>
-    <tizen:application id="oqhtpHf3be.signage" package="oqhtpHf3be" required_version="2.3"/>
+    <tizen:application id="MjC3AYySwa.signage" package="MjC3AYySwa" required_version="2.3"/>
     <author href="https://menuonline.com/"/>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
     <icon src="icon.png"/>
     <tizen:metadata key="http://tizen.org/metadata/app_ui_type/base_screen_resolution" value="extensive"/>
     <tizen:metadata key="http://samsung.com/tv/metadata/use.voiceguide" value="false"/>
-    <name>MenuOnline TV Player</name>
+    <name>Menu Online Digital Signage</name>
     <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:privilege name="http://tizen.org/privilege/keymanager"/>
