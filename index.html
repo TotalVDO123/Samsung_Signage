@@ -11,6 +11,7 @@
 
 <body>
   <div class="landing-page" id="landingPage">
+    <div class="screen-id" id="screen-div-id"> <span id="qr-image-id"></span></div>
     <div class="screen-id" id="screen-div-id"> <span id="screen-id"></span></div>
     <div id="button-div" style="height: 85px;">
       <button class="button-cl" id="reset">RESET</button>
@@ -42,20 +43,22 @@
       childDiv.style.width = width + 'px';
       childDiv.style.height = height + 'px';
       childDiv.style.backgroundColor = color;
+      childDiv.style.zIndex = 9999;
       parentDiv.appendChild(childDiv);
     }
-    function displayMediaPlaylist(arr, divId) {
+    function displayMediaPlaylist(arr, divId,index) {
       var currentIndex = 0;
       var container = document.getElementById(divId);
       function showNextMedia() {
         var mediaItem = arr[currentIndex];
+		console.log("current index",mediaItem)
         var mediaElement;
         if (mediaItem.type === "VIDEO") {
           mediaElement = document.createElement('video');
           mediaElement.src = mediaItem.imageurl;
           mediaElement.style.width = '99%';
           mediaElement.style.height = '99%';
-          mediaElement.style.zIndex = 5;
+          mediaElement.style.zIndex = 5+index;
           mediaElement.muted = true;
           mediaElement.controls = false;
           mediaElement.autoplay = true;
@@ -66,7 +69,7 @@
           mediaElement.style.objectFit = 'contain';
           mediaElement.style.width = '99%';
           mediaElement.style.height = '99%';
-          mediaElement.style.zIndex = 5;
+          mediaElement.style.zIndex = 5+index;
         }
         container.innerHTML = '';
         container.appendChild(mediaElement);
@@ -112,14 +115,13 @@
     function hideOterDetails() {
       document.getElementById("button-div").style.display = "none";
       document.getElementById("internet-status").style.display = "none";
+      document.getElementById("server-status").style.display = "none";
       document.getElementById("screen-div-id").style.display = "none";
 
     }
 
-
     function doSocket(SCREEN_ID) {
-      console.log(SCREEN_ID);
-      const baseurl =  "https://signage.mycircle.net";
+      const baseurl = "https://signage.mycircle.net";
       const BASE_URL = "https://react.tjcg.in";
       const socket = io(baseurl, {
         path: "/socket.live",
@@ -128,28 +130,91 @@
         },
         transports: ["websocket"],
       });
+      window.socket = socket 
       document.getElementById("screen-id").textContent = SCREEN_ID;
       socket.on("connect", function (response) {
         console.log("Socket connected to server");
+        document.getElementById('close').focus();
        // document.getElementById("server-status").textContent = "Already Paired ,ready to recieve content ";
       });
-      socket.on("screen_data", function (data) {
-        document.getElementById("server-status").textContent = "Paired and ready to recieve content ";
-        console.log("GET::: screen_data", data);
-        localStorage.setItem("profile", JSON.stringify(data));
+    socket.on("screen_data", function (data) {
+  console.log("GET::: screen_data", data);
+  let prevData = localStorage.getItem("profile");
+  let newID = data?.screenNumber;
+  socket.on("connect", function (data) {
+        console.log("Socket connected", data);
+        document.getElementById("server-status").textContent =
+          "";
+          document.getElementById("internet-status").style.display = "none";
       });
+  // Check if screen ID has changed or is new
+        if (!prevData || (JSON.parse(prevData).screenNumber !== newID)) {
+            document.getElementById("server-status").textContent = "Paired and ready to receive content";
+            document.getElementById("server-status").style.display = "block";
+            localStorage.setItem("profile", JSON.stringify(data));
+        } else {
+            // Still show the message even if it's the same ID, but don't reset storage
+            document.getElementById("server-status").textContent = "Paired and ready to receive content";
+            document.getElementById("server-status").style.display = "block";
+        }
+        });
+
+        if(checkIsPrevId()){
+            
+            document.getElementById("server-status").textContent = "Paired and ready to receive content";
+            document.getElementById("server-status").style.display = "block";
+        }
+
+        if(checkIsPrevId()){
+        const data_ = JSON.parse(localStorage.getItem("custom_layout_data"))
+        const playlist_data = JSON.parse(localStorage.getItem("playlist_data"))
+        console.log("Getting data from storage ",data_)
+        hideOterDetails();
+if(data_){
+    for (var k = 0; k < data_.layout.length; k++) {
+  var SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
+  var X = SCREEN_WIDTH * data_.layout[k].x / 500
+  var WIDTH = SCREEN_WIDTH * data_.layout[k].width / 500
+  Y = SCREEN_HEIGHT * data_.layout[k].y / 350
+  var HEIGHT = SCREEN_HEIGHT * data_.layout[k].height / 350
+  appendChildDiv("custom-layout", X, Y, WIDTH, HEIGHT, data_.layout[k].fill, "child" + k);
+  document.getElementById("image-slider").style.display = "relative"
+document.getElementById("image-slider").style.display = "none";
+document.getElementById("landingPage").style.backgroundImage = "none";
+}
+
+for (var w = 0; w < data_.layout.length; w++) {
+  console.log(makeVideoImagePlaylist(data_.layout[w].media));
+  displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w,w);
+}
+}else{
+    stopSlider();
+        startSlider(makeSliderPlaylist(playlist_data.playlist));
+        localStorage.setItem("profile", JSON.stringify(playlist_data.playlist));
+        hideOterDetails();
+}
+
+      }else{
+        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>")
+      }
+
       socket.on("use_our_template_data", function (data) {
         console.log("GET:::use_our_template_data", data);
+        document.getElementById("server-status").textContent = "";
       });
       socket.on("playlist_data", function (data) {
         console.log("GET::: playlist_data", data);
+        localStorage.setItem("playlist_data",JSON.stringify(data))
         stopSlider();
         startSlider(makeSliderPlaylist(data.playlist));
+        localStorage.setItem("profile", JSON.stringify(data.playlist));
         hideOterDetails();
       });
       socket.on("custom_layout_data", function (data_) {
         console.log("GET::: custom_layout_data", data_);
+        localStorage.setItem("custom_layout_data",JSON.stringify(data_))
         hideOterDetails();
+
         for (var k = 0; k < data_.layout.length; k++) {
           var SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
           var X = SCREEN_WIDTH * data_.layout[k].x / 500
@@ -157,11 +222,14 @@
           Y = SCREEN_HEIGHT * data_.layout[k].y / 350
           var HEIGHT = SCREEN_HEIGHT * data_.layout[k].height / 350
           appendChildDiv("custom-layout", X, Y, WIDTH, HEIGHT, data_.layout[k].fill, "child" + k);
+		  document.getElementById("image-slider").style.display = "relative"
+        document.getElementById("image-slider").style.display = "none";
+        document.getElementById("landingPage").style.backgroundImage = "none";
         }
 
         for (var w = 0; w < data_.layout.length; w++) {
           console.log(makeVideoImagePlaylist(data_.layout[w].media));
-          displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w);
+          displayMediaPlaylist(makeVideoImagePlaylist(data_.layout[w].media), "child" + w,w);
         }
 
       });
@@ -170,6 +238,7 @@
       });
       socket.on("CLOSE_SCREEN_APP", function (data) {
         console.log("GET::: CLOSE_SCREEN_APP", data);
+        //localStorage.getItem("profile", JSON.stringify(data));
       });
       socket.on("UPGRADE_SCREEN_APP", function (data) {
         console.log("GET::: UPGRADE_SCREEN_APP", data);
@@ -217,15 +286,31 @@
         document.getElementById("server-status").textContent =
           "Socket disconnected from server";
           document.getElementById("internet-status").style.display = "block";
+    document.getElementById("internet-status").style.display = "block";
       });
+    
       socket.on("use_our_template_data", function (data) {
         showsingleImage( encodeURI(data.image_url));
+        if (checkIsPrevId()) {
+          var OldData_1 = localStorage.getItem(data);
+          console.log(OldData_1);
+        if (OldData_1) {
+          var profileObject = JSON.parse(OldData_1);
+          console.log(profileObject);
+          // document.getElementById("screen-id").textContent = profileObject.screenNumber;
+          // doSocket(profileObject.screenNumber);
+        }
+        }
         console.log("GET::: use_our_template_data", data);
+        document.getElementById("custom_layout_data").style.display = "none";
       });
       socket.on("update_media_in_screen", function (data) {
         console.log("GET::: update_media_in_screen", data);
       });
+
+      
     }
+
     window.onload = function () {
       document.getElementById("image-slider").style.display = "none";
       document.getElementById("internet-status").style.display = 'none';
@@ -289,9 +374,16 @@
             doSocket(response.screenNumber);
           }
         };
-        xhttp.open("GET", "https://react.tjcg.in/api/generate-screen-id?number=000000", true);
+        xhttp.open("GET", "https://react.tjcg.in/api/generate-screen-id?number=123456", true);
         xhttp.send();
       }
+function generateQRCode(SCREEN_ID) {
+    document.getElementById("qr-image-id").innerHTML = `<img class="qr-images" src="https://react.tjcg.in/api/generate-screen-qr-image?number=${SCREEN_ID}" />`;
+}
+
+// Example usage
+generateQRCode(SCREEN_ID);
+
       updateNetworkStatus();
       window.addEventListener("online", updateNetworkStatus);
       window.addEventListener("offline", updateNetworkStatus);

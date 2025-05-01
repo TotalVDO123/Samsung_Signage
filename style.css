@@ -48,8 +48,11 @@ body {
   animation: blink 1s infinite;
 }
 .server {
+  margin-left: 713px;
   color: white;
+  z-index: 999999;
   font-size: 50px;
+  position: absolute;
   font-weight: 700;
   text-align: center;
   animation: blink 1s infinite;
@@ -63,16 +66,16 @@ body {
     font-weight: 800;
     text-align: end;
     margin-top: 25px;
-    margin-right: 25px;
+    margin-right: 60px;
 }
 
 .button-cl{
   float: right;
   margin: 30px;
   width: 150px;
-  height: 50px;
+  height: 63px;
   color: white;
-  background: black;
+  background: #dc6912;
   border: 10px transparent;
   border-radius: 15px;
   font-size: 25px;
@@ -84,7 +87,7 @@ body {
   float: right;
   margin: 30px;
   width: 150px;
-  height: 50px;
+  height: 63px;
   color: white;
   background: green;
   border: 10px white;
@@ -94,8 +97,14 @@ body {
   padding: 10px 10px 10px 10px;
 }
 
-
-
+img.qr-images {
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  position: absolute;
+  top: 370px;
+  margin-left: 138px;
+}
 
 
 #content {
@@ -207,4 +216,16 @@ img {
   transform: translate(-50%, 21.5%);
   background-size: contain !important;
   background-repeat: no-repeat !Important;
+}
+span#server-status {
+  animation: fadeIn 0.3s ease-in-out;
+  text-align: center;
+  background: green;
+  width: 816px;
+  z-index: 999999;
+  border: 2px solid red;
+  position: absolute;
+  padding: 10px;
+  top: 86px;
+  display: none;
 }
