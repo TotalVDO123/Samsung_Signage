@@ -39,8 +39,8 @@ G526+ASUAQ==</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>XclOUONaXuc0H9Os79CbtcbUgpCLaScBzoPqIHpJPtf1nS7DBH1nTPXa5zHiCX6tvN0PWbWrd6fB
-8ZFDpwV4NA==</DigestValue>
+<DigestValue>VFKwMQG7tHO0RT5ZsXSNawj43YGdTrLJHHuUzIQIEZzogYs83vwrkuXr1HYM6UmbxnSADwJJg1/c
+Ul2wmSf3jg==</DigestValue>
 </Reference>
 <Reference URI="css%2Fstyle.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
@@ -84,13 +84,8 @@ z2VuuOga6Q==</DigestValue>
 </Reference>
 <Reference URI="index.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>uFrHrjgYtdvJvFu9cweuC5TS3Icx30+wgM4IlAAQA3zK2CxqWZ42NXiTLQxfeu2YP51rsDaTLcVE
-ewPiOlrLNQ==</DigestValue>
-</Reference>
-<Reference URI="index2.html">
-<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>sWsVPGTRicTV3lfMZgc2txH8aBiAG6BeL/FJFDN9vStvhLK/eAaUEeu6jeebqBTtr10rIuzKASXu
-BSC0MIewZw==</DigestValue>
+<DigestValue>H2K87KhnkVm99Jail3AKBqEAwqAq6GUuRDWb9oc6qOaXS0dd6hyp0R4cRA6wpSVnWkRZnjYCx4nb
+yF9I7H+p0Q==</DigestValue>
 </Reference>
 <Reference URI="js%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
@@ -99,8 +94,8 @@ tGwxnG5oAg==</DigestValue>
 </Reference>
 <Reference URI="style.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"></DigestMethod>
-<DigestValue>+jcLKOgWilzkAl44QSskQfGe0wacPsvdD7IID6uJdLsHY8CmGMUlZuQ/Ei7FQEAOYDoDnd6Bgq3D
-ebIw4c9Aww==</DigestValue>
+<DigestValue>+VRFlbymhQG1U15UIiSA/hThSDHhE2o6oH9SPdDlTE5dkhM7xjD+9ohz2Tf6fzTdPSobuNV+JVCs
+ePVMozomhg==</DigestValue>
 </Reference>
 <Reference URI="#prop">
 <Transforms>
@@ -112,9 +107,9 @@ QY10fG1EWQ==</DigestValue>
 </Reference>
 </SignedInfo>
 <SignatureValue>
-d57PuM5RPfCez+bWuimgscfGMke6COsfbhxyQ4sVo0sTOgd70mgz8DZRXDvzxmWrbB7coUo6SZzH
-sPtNGTT4ovfMEtwkC+o0gEsjBgktw7At8vcVOesuX2CUcK6JYB6i8/veSF//gsOqOuP5DXBOyK37
-DnUTDnspRM0TF3ZyZVg=
+ieMuLb2fdcgJ4lHDgmymVAvqkU6Wu4G0pqtWNERCFlMbN3ujntrXWTVbb4bilrWRAIZoe3rMYPK5
++M8LZIci0G0MfLJ3/g/laYwg9oVcBoJkSGGKDfgdPNJe/dLHIUQWxTtkO3foAD1B8sQJGlkaWQch
+wGhPtrWi6fZpASEk6dw=
 </SignatureValue>
 <KeyInfo>
 <X509Data>

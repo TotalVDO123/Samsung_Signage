@@ -48,7 +48,8 @@ body {
   animation: blink 1s infinite;
 }
 .server {
-  margin-left: 713px;
+  margin-left: 28%;
+  top:9%;
   color: white;
   z-index: 999999;
   font-size: 50px;
